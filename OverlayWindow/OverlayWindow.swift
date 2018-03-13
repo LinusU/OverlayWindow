@@ -1,10 +1,10 @@
 import UIKit
 
+var retainedWindows = Set<UIWindow>()
+
 open class OverlayWindow<T: UIViewController> {
     open let rootViewController: T
-
-    internal var hidden: Bool = false
-    internal var window: UIWindow?
+    internal let window: UIWindow
 
     init(rootViewController: T, animated: Bool) {
         let targetFrame = UIScreen.main.bounds
@@ -24,18 +24,14 @@ open class OverlayWindow<T: UIViewController> {
         }
     }
 
-    func hide(animated: Bool, completion: (() -> Void)? = nil) {
-        guard hidden == false else { return }
-        guard let window = self.window else { return }
-
-        self.hidden = true
-
-        let duration = (animated ? 0.5 : 0.0)
+    deinit {
+        let window = self.window
         let targetFrame = window.frame.offsetBy(dx: 0, dy: window.frame.height)
 
-        UIView.animate(withDuration: duration, animations: { window.frame = targetFrame }, completion: { _ in
-            self.window = nil
-            completion?()
+        retainedWindows.insert(window)
+
+        UIView.animate(withDuration: 0.5, animations: { window.frame = targetFrame }, completion: { _ in
+            retainedWindows.remove(window)
         })
     }
 }
