@@ -6,6 +6,11 @@ open class OverlayWindow<T: UIViewController> {
     open let rootViewController: T
     internal let window: UIWindow
 
+    public var tintColor: UIColor! {
+        get { return window.tintColor }
+        set { window.tintColor = newValue }
+    }
+
     public init(rootViewController: T, animated: Bool) {
         let targetFrame = UIScreen.main.bounds
         let startFrame = targetFrame.offsetBy(dx: 0, dy: targetFrame.height)
