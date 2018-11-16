@@ -3,7 +3,7 @@ import UIKit
 var retainedWindows = Set<UIWindow>()
 
 open class OverlayWindow<T: UIViewController> {
-    open let rootViewController: T
+    public let rootViewController: T
     internal let window: UIWindow
 
     public var tintColor: UIColor! {
@@ -20,7 +20,7 @@ open class OverlayWindow<T: UIViewController> {
         self.rootViewController = rootViewController
         self.window = window
 
-        window.windowLevel = 1
+        window.windowLevel = UIWindow.Level(rawValue: 1)
         window.rootViewController = rootViewController
         window.makeKeyAndVisible()
 
